@@ -1,6 +1,6 @@
 # ProjectMUSEEG
-*explaining what the project is*
-*Project A*
+*explaining what the project is* /n 
+*Project A* 
 *Project B*
 ## Phase 1: Research
 *include documents here*
@@ -11,5 +11,9 @@
 *retrieving, and storing data*
 *analyzing data with Neural Network*
 *maybe creating simole program utilizing this information*
+# Project A: Musical Therapy
+## Phase 4: Collecting Data (relevant to project)
+## Phase 5: Analyzing Data (relevant to project)
+# Project B: Brain Wave to Music Interpretation
 ## Phase 4: Collecting Data (relevant to project)
 ## Phase 5: Analyzing Data (relevant to project)
