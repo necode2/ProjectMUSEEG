@@ -1,5 +1,5 @@
 # ProjectMUSEEG
-*Welcome to Project MUSEEG! (Pronounced Muse-EGG) * </br></br>
+✽ Welcome to Project MUSEEG! (Pronounced Muse-EGG) ✽ </br></br>
 ***Project A*** </br> 
 *Music is already known to help with anxiety, focus, and relaxation—but what if it could be tailored to an individual’s brain activity? Brainwaves provide measurable indicators of emotional states like stress, restlessness, and calm. By collecting EEG data and training a neural network, I aim to create a system that detects these emotional states and generates personalized music designed to counteract them. The long-term goal is to explore applications in mental health, where this system could be used in hospitals, therapy settings, or for personal well-being. Since neurotechnology isn’t one-size-fits-all, this research is a step toward more personalized solutions in brain-music interaction.* </br></br>
 ***Project B***
