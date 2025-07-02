@@ -7,7 +7,7 @@
 ## Phase 1: Research
 *[Bibliography](https://docs.google.com/document/d/126_Q5-wPVYQXYX758TkZR0ndfYQ_7DFlI9uJoeaBVlY/edit?usp=sharing) of useful resources.*
 ## Phase 2: Hardware 
-![unboxing gif](README_IMGS/unboxing.gif)
+![](README_IMGS/unboxing.gif)
 |Material Link                       | What's Included                                                                   | Cost                        |
 | --------                           | -------                                                                           | -------                     |
 | [Ultracortex "Mark IV" EEG Headset](https://shop.openbci.com/products/ultracortex-mark-iv?variant=23280741699)  | <ul><li> EEG nodes</li><li>Ear clips</li><li>Screws</li><li>Ribbon Cables</li></ul> |$900                         |
