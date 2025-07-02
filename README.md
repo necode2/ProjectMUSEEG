@@ -7,14 +7,15 @@
 ## Phase 1: Research
 *[Bibliography](https://docs.google.com/document/d/126_Q5-wPVYQXYX758TkZR0ndfYQ_7DFlI9uJoeaBVlY/edit?usp=sharing) of useful resources.*
 ## Phase 2: Hardware 
-<img src="README_IMGS/unboxing.gif"/>
+<div align="center">
+<img src="README_IMGS/assembly.gif"/></div>
 
 |Material Link                       | What's Included                                                                   | Cost                        |
 | --------                           | -------                                                                           | -------                     |
 | [Ultracortex "Mark IV" EEG Headset](https://shop.openbci.com/products/ultracortex-mark-iv?variant=23280741699)  | <ul><li> EEG nodes</li><li>Ear clips</li><li>Screws</li><li>Ribbon Cables</li></ul> |$900                         |
 | [Daisy + Cyton BioSensing Board](https://shop.openbci.com/products/cyton-daisy-biosensing-boards-16-channel?variant=38959256526)    | <ul><li>Cyton+Daisy board (able to receive data from 16 different channels/points on brain)</li><li>Rechargeable Lithium Battery</li><li>Charging pack (for battery)</li><li>Programmable Dongle (Bluetooth communication)</li><li>Y-splitter cable</li><li>Board cover</li></ul> | $2100|
 |[USB-A to USB-C Converter](https://www.bestbuy.com/site/insignia-usb-c-to-usb-adapter-black/6473492.p?skuId=6473492&extStoreId=46&utm_source=feed&ref=212&loc=18670532085&gad_source=1&gad_campaignid=18673989082&gbraid=0AAAAAD-ORIiROXi48bwZ1xsDqw0y9IgxL&gclid=Cj0KCQjwjo7DBhCrARIsACWauSmR3vUUhmtopa0tZ__U4yZM3AUu9UiuOb3mSAOf0FKv1AXDpcI0BTkaAo3EEALw_wcB&gclsrc=aw.ds) | <ul><li>USB-A to USB-C Converter</li></ul> | $10 |
-|Gorilla Glue | Super Glue | $4 |
+|[Gorilla Glue](https://g.co/kgs/9oacW73) | <ul><li>Super Glue</li></ul>| $7 |
 
 ![](README_IMGS/final.png)
 
