@@ -20,10 +20,8 @@ while True:
         face_roi = frame[y:y + h, x:x + w]
 
     try:
-        # Analyze the frame with DeepFace (emotion, age, gender, race, etc.)
+        # Analyze the frame with DeepFace (emotion)
         result = DeepFace.analyze(face_roi, actions=['emotion'], enforce_detection=False)
-
-        # Extract attributes
         emotion = result[0]['dominant_emotion']
 
         # Display text on frame
