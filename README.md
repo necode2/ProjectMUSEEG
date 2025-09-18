@@ -40,7 +40,26 @@
 *retrieving, and storing data*
 # Project A: Musical Therapy
 ## Phase 4: Collecting Data (relevant to project)
+
+The first part is to detect a user's emotional state. For this project's phase I have decided to utilise the EmoEEG-MC dataset (completely open sourced) EEG data from 60 participants regarding their emotional state (eg. sadness, disgust, joy, fear, neutral, inpiration, and tenderness) when exposed to multimedia stimuli. There are a few missing entries and one missing EDF file, but for the most part the data is complete, the derivative files are completely intact. 
+
+The files are large and take up quite a bit of processing power and GB, I downloaded 18 participants data to play around with different EEG preprocessing techniques. (I will soon add those files) *expand*
+
+For the sake of having more data to train my model to detect emotions (which is very nuanced, and rely on purest form of emotion eg. data cannot be faked or duplicated with some data augmentation for fear of overfitting and incorrect detection) properly I will utilise the derivatives but process them so they match the settings of my headset and number of nodes. 
+
+There are additional and extensive data sets from EEGs regarding emotion recognition the most prominent of which are housed at the Queen Mary University of London, however they are reserved for other Universities and research groups.
+
+In my search of more data to properly train my model to detect emotions accurately I have two opetions, to collect more data from my headset and/or potentially combine with a different medium of detection. I have decided that I will be attemting to do both. To collect data from myself and potentially other participants has a few more hurdles I need to figure out, but will update soon. Additionaly, I will combine my model that detects emotion from EEG output with a model that can for the most part accurately detect emotions via live camera feed. 
+
+I wanted to first learn about the principles of building a model for facial emotion recognition from scratch *expand* I will soon include my model which I trained on a Kaggle dataset and had about 60-70% accuracy in detection of emotions via photos. But to get optimal results I ended up using the DeepFace model and OpenCV library to access my webcam for live detection. 
+
+End goal is to have a fusion neural network which is able to stack both models (emotion detection from EEG will have more weight since that is a purer form of emotion and cannot be faked, while the facial emotion recognition will supplement this). Hopefully this will result in overall more accurate model for emotion recognition. 
+___
+
 ## Phase 5: Analyzing Data (relevant to project)
 # Project B: Brain Wave to Music Interpretation
-## Phase 4: Collecting Data (relevant to project)
-## Phase 5: Analyzing Data (relevant to project)
+## Phase 4: Building a Simple Interpreter
+While I will expand on the specifics later the workflow of the files under Project B are as follows, through the power of LSL we are able to transefer the processed live data from the OpenBCI GUI to VSCode/code editor of choice and then calling upon Garage Band/Music creation workflow of choice to play the sound. Brain waves have different frequencies and amplitudes just like music, so the way the program work is it takes a voltage and clips it to stay in the +100 to -100 micro-volt range and then scales it to play a note in the MiDi range. There are two different files--one for a single node, the otehr that plays all 16 nodes at once.  
+## Phase 5: Expanding 
+
+
