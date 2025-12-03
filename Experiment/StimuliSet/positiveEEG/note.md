@@ -1,0 +1,1 @@
+All EEG data that corressponds with positive emotion will go in this folder

@@ -1,0 +1,1 @@
+All EEG data that corressponds with negative emotion will go in this folder
