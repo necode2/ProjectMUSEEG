@@ -40,6 +40,8 @@
 *retrieving, and storing data*
 # Project A: Musical Therapy
 ## Phase 4: Collecting Data (relevant to project)
+*Note: I had trouble with loss of data packets when streaming via LSL, thank you William for helping me troubleshoot! Here is the forum post for reference: https://openbci.com/forum/index.php?p=/discussion/4075/confusion-on-lost-packets-could-be-a-software-issue#:~:text=connect%20to%20stream,proceed%20with%20the%20next%20stimuli.*
+|------|
 
 The first part is to detect a user's emotional state. For this project's phase I have decided to utilise the EmoEEG-MC dataset (completely open sourced) EEG data from 60 participants regarding their emotional state (eg. sadness, disgust, joy, fear, neutral, inpiration, and tenderness) when exposed to multimedia stimuli. There are a few missing entries and one missing EDF file, but for the most part the data is complete, the derivative files are completely intact. 
 
@@ -49,7 +51,9 @@ For the sake of having more data to train my model to detect emotions (which is 
 
 There are additional and extensive data sets from EEGs regarding emotion recognition the most prominent of which are housed at the Queen Mary University of London, however they are reserved for other Universities and research groups.
 
-In my search of more data to properly train my model to detect emotions accurately I have two opetions, to collect more data from my headset and/or potentially combine with a different medium of detection. I have decided that I will be attemting to do both. To collect data from myself and potentially other participants has a few more hurdles I need to figure out, but will update soon. Additionaly, I will combine my model that detects emotion from EEG output with a model that can for the most part accurately detect emotions via live camera feed. 
+In my search of more data to properly train my model to detect emotions accurately I have two opetions, to collect more data from my headset and/or potentially combine with a different medium of detection. I have decided that I will be attemting to do both. I have collected data from subjects from stimulus videos from EmoStim Library. I have cleaned and determined my videos in the 1_exploring-emoStim.ipynb file and have created a full a experiment setup in 2_brainflow-collectingEEG.ipynb utilizing brainflow python library to collect EEG data during the segments when the stimulus videos are played and then save them as numpyArray files grouped under negative or positive EEG folders. After testing I also have participants rate their experiences with the following google form to better understand their emotional state through valence and arousal: https://forms.gle/pFkcQGueHi17YKBE8. I am now cleaning the data by applying bandpass filtering, normalizing, and cutting in segments for model training and will update once I have everything complete.
+
+Additionaly, I will combine my model that detects emotion from EEG output with a model that can for the most part accurately detect emotions via live camera feed. 
 
 I wanted to first learn about the principles of building a model for facial emotion recognition from scratch *expand* I will soon include my model which I trained on a Kaggle dataset and had about 60-70% accuracy in detection of emotions via photos. But to get optimal results I ended up using the DeepFace model and OpenCV library to access my webcam for live detection. 
 
@@ -61,5 +65,6 @@ ___
 ## Phase 4: Building a Simple Interpreter
 While I will expand on the specifics later the workflow of the files under Project B are as follows, through the power of LSL we are able to transefer the processed live data from the OpenBCI GUI to VSCode/code editor of choice and then calling upon Garage Band/Music creation workflow of choice to play the sound. Brain waves have different frequencies and amplitudes just like music, so the way the program work is it takes a voltage and clips it to stay in the +100 to -100 micro-volt range and then scales it to play a note in the MiDi range. There are two different files--one for a single node, the otehr that plays all 16 nodes at once.  
 ## Phase 5: Expanding 
+I found that Transformer models are best in music generation due to their ability of understanding context which is very crucial in creating fluid musical pieces. After doing a deep dive with videos from Velario Valrdo from the SOund of AI (here are my notes) I am playing around with filtering brainwaves and using them as inputs to RAVE to create complete musical compositions from snippets of EEG data. 
 
 
