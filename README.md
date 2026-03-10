@@ -89,6 +89,9 @@ Now for the *Model* (GRU, a type of RNN great for sequential data + more computa
 - **Optimiser** -- Adam (lr=1e-3) with `ReduceLROnPlateau` scheduler
 - **Split** -- 70% train / 15% val / 15% test
 
+![](README_IMGS/training_curves.png)
+*Model perfromance over time*
+|------|
 
 Library Requirements:
 ```
