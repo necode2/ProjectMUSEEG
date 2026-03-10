@@ -1,0 +1,108 @@
+import mne
+from mne.decoding import Scaler
+import numpy as np
+import os
+import glob
+
+#===== PATHS =====
+positive_path = "/Users/noorelbanna/Desktop/ProjectMUSEEG/Experiment/StimuliSet/positiveEEG/"
+negative_path = "/Users/noorelbanna/Desktop/ProjectMUSEEG/Experiment/StimuliSet/negativeEEG/"
+end_derivatives_path = "/Users/noorelbanna/Desktop/ProjectMUSEEG/Experiment/StimuliSet/epochs/"
+
+os.makedirs(end_derivatives_path, exist_ok=True)
+
+
+# Process one folder and return (X list, label)
+def process_folder(raw_path, label):
+    """
+    Processes all *_EEG.npy files in raw_path.
+    label: 1 = positive, 0 = negative
+
+    Returns:
+        x_list  : list of arrays, each shape (n_windows, timesteps, channels)
+        y_list  : list of arrays, each shape (n_windows,)
+    """
+    pattern = os.path.join(raw_path, "*_EEG.npy")
+    files = sorted(glob.glob(pattern))
+    print(f"\nFound {len(files)} files in '{raw_path}'")
+
+    x_list, y_list = [], []
+
+    for file in files:
+        fname = os.path.basename(file)
+        parts = fname.split("_")
+        first_num = int(parts[1])
+        print(f"  Processing video {first_num} ({fname})")
+
+        #===== LOAD =====
+        raw = np.load(file)
+        print(f"    Shape: {raw.shape}  |  NaNs: {np.isnan(raw).any()}")
+
+        #===== microvolts to volts =====
+        data = raw.copy() / 1e6
+
+        #===== TRANSFORM to MNE =====
+        fs   = 125
+        info = mne.create_info(
+            ch_names=[f'EEG{i+1}' for i in range(16)],
+            sfreq=fs,
+            ch_types='eeg'
+        )
+        eeg_data = mne.io.RawArray(data, info, verbose=False)
+
+        #===== FILTERING =====
+        eeg_data.notch_filter(60, verbose=False)
+        eeg_data.filter(l_freq=0.5, h_freq=40, verbose=False)
+
+        # Remove first 5 s (artefact-prone transition period)
+        eeg_data.crop(tmin=5.0, tmax=None)
+
+        # Common Average Reference
+        eeg_data.set_eeg_reference('average', verbose=False)
+
+        #===== EPOCHING =====
+        epochs = mne.make_fixed_length_epochs(
+            eeg_data, duration=2.0, overlap=1.0, verbose=False
+        )
+
+        epoch_data = epochs.get_data() # (n_windows, channels, timesteps)
+        
+        # GRU expects (batch, timesteps, channels)
+        x = epoch_data.transpose(0, 2, 1) # (n_windows, timesteps, channels)
+        y = np.full(x.shape[0], label, dtype=int)
+
+        x_list.append(x)
+        y_list.append(y)
+
+    return x_list, y_list
+
+
+
+#===== PROCESS BOTH CLASSES =====
+pos_x, pos_y = process_folder(positive_path, label=1)
+neg_x, neg_y = process_folder(negative_path, label=0)
+
+all_x_list = pos_x + neg_x
+all_y_list = pos_y + neg_y
+
+#===== CONCATENATE ALL EPOCHS AND LABELS =====
+X_raw = np.concatenate(all_x_list, axis=0)   # (total_windows, timesteps, channels)
+y = np.concatenate(all_y_list, axis=0)   # (total_windows,)
+
+print(f"\nCombined dataset --> X: {X_raw.shape}  y: {y.shape}")
+print(f"Positive samples: {(y == 1).sum()}  |  Negative: {(y == 0).sum()}")
+
+#===== GLOBAL Z-SCORE SCALING (fit once across ALL epochs) =====
+# Scaler works on shape (epochs, channels, times) so transpose back temporarily
+# ================================================================
+X_for_scaler = X_raw.transpose(0, 2, 1)                          # → (N, ch, time)
+X_scaled = Scaler(scalings='mean').fit_transform(X_for_scaler)
+X_final = X_scaled.transpose(0, 2, 1)                       # → (N, time, ch)
+
+print(f"Final shape ready for GRU: {X_final.shape}")             # (N, timesteps, channels)
+
+#===== SAVE =====
+np.save(os.path.join(end_derivatives_path, "X_all.npy"), X_final)
+np.save(os.path.join(end_derivatives_path, "y_all.npy"), y)
+
+print(f"\nSaved  X_all.npy  and  y_all.npy  -->  {end_derivatives_path}")
