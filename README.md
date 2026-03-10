@@ -74,6 +74,7 @@ After collecting data myself from participants, I have *preprocessed* the data i
 ![](README_IMGS/originalData.png)
 *Original Data of one stimulus*
 |------|
+
 ![](README_IMGS/cleanedData.png)
 *Cleaned Data of one stimulus, before epoching*
 |------|
