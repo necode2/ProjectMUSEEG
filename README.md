@@ -58,7 +58,9 @@ Additionaly, I will combine my model that detects emotion from EEG output with a
 I wanted to first learn about the principles of building a model for facial emotion recognition from scratch *expand* I will soon include my model which I trained on a Kaggle dataset and had about 60-70% accuracy in detection of emotions via photos. But to get optimal results I ended up using the DeepFace model and OpenCV library to access my webcam for live detection. 
 
 End goal is to have a fusion neural network which is able to stack both models (emotion detection from EEG will have more weight since that is a purer form of emotion and cannot be faked, while the facial emotion recognition will supplement this). Hopefully this will result in overall more accurate model for emotion recognition. 
+___
 
+## Phase 5: Analyzing Data (relevant to project)
 ### UPDATE GRU v1: 
 After collecting data myself from participants, I have *preprocessed* the data in the following steps:
 1. **Load & convert** -- raw `.npy` files loaded, converted from µV to V
@@ -68,6 +70,13 @@ After collecting data myself from participants, I have *preprocessed* the data i
 5. **Epoching** -- segmented into 2-second windows with 50% overlap --> shape `(n_windows, 250, 16)`
 6. **Scaling** -- global z-score via MNE `Scaler`, fit on training data only
 7. **Labels** -- `1 = positive`, `0 = negative`, saved alongside data
+
+![](README_IMGS/originalData.png)
+*Original Data of one stimulus*
+|------|
+![](README_IMGS/cleanedData.png)
+*Cleaned Data of one stimulus, before epoching*
+|------|
 
 Output is `X_all.npy` (5898, 250, 16) and `y_all.npy` (5898,) (I am actively adding on to this dataset)
 
@@ -88,10 +97,6 @@ torch
 scikit-learn
 matplotlib
 ```
-|------|
-___
-
-## Phase 5: Analyzing Data (relevant to project)
 # Project B: Brain Wave to Music Interpretation
 ## Phase 4: Building a Simple Interpreter
 While I will expand on the specifics later the workflow of the files under Project B are as follows, through the power of LSL we are able to transefer the processed live data from the OpenBCI GUI to VSCode/code editor of choice and then calling upon Garage Band/Music creation workflow of choice to play the sound. Brain waves have different frequencies and amplitudes just like music, so the way the program work is it takes a voltage and clips it to stay in the +100 to -100 micro-volt range and then scales it to play a note in the MiDi range. There are two different files--one for a single node, the otehr that plays all 16 nodes at once.  
