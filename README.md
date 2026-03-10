@@ -58,6 +58,37 @@ Additionaly, I will combine my model that detects emotion from EEG output with a
 I wanted to first learn about the principles of building a model for facial emotion recognition from scratch *expand* I will soon include my model which I trained on a Kaggle dataset and had about 60-70% accuracy in detection of emotions via photos. But to get optimal results I ended up using the DeepFace model and OpenCV library to access my webcam for live detection. 
 
 End goal is to have a fusion neural network which is able to stack both models (emotion detection from EEG will have more weight since that is a purer form of emotion and cannot be faked, while the facial emotion recognition will supplement this). Hopefully this will result in overall more accurate model for emotion recognition. 
+
+### UPDATE GRU v1: 
+After collecting data myself from participants, I have *preprocessed* the data in the following steps:
+1. **Load & convert** -- raw `.npy` files loaded, converted from µV to V
+2. **Filtering** -- 60Hz notch filter, 0.5-40Hz bandpass
+3. **Crop** -- first 5 seconds removed to avoid onset artefacts
+4. **Reference** -- Common Average Reference (CAR) applied
+5. **Epoching** -- segmented into 2-second windows with 50% overlap --> shape `(n_windows, 250, 16)`
+6. **Scaling** -- global z-score via MNE `Scaler`, fit on training data only
+7. **Labels** -- `1 = positive`, `0 = negative`, saved alongside data
+
+Output is `X_all.npy` (5898, 250, 16) and `y_all.npy` (5898,) (I am actively adding on to this dataset)
+
+Now for the *Model* (GRU, a type of RNN great for sequential data + more computationally eficent than an LSTM):
+- **GRU** -- 2-layer, hidden size 64, dropout 0.3
+- **Input** -- `(batch, 250 timesteps, 16 channels)`
+- **Output** -- single logit --> binary prediction
+- **Loss** -- `BCEWithLogitsLoss` with `pos_weight` to handle class imbalance (positive: 2208, negative: 3690)
+- **Optimiser** -- Adam (lr=1e-3) with `ReduceLROnPlateau` scheduler
+- **Split** -- 70% train / 15% val / 15% test
+
+
+Library Requirements:
+```
+mne
+numpy
+torch
+scikit-learn
+matplotlib
+```
+|------|
 ___
 
 ## Phase 5: Analyzing Data (relevant to project)
