@@ -81,13 +81,23 @@ After collecting data myself from participants, I have *preprocessed* the data i
 
 Output is `X_all.npy` (5898, 250, 16) and `y_all.npy` (5898,) (I am actively adding on to this dataset)
 
-Now for the *Model* (GRU, a type of RNN great for sequential data + more computationally eficent than an LSTM):
+Now for the *Model* (GRU, a type of RNN great for sequential data + more computationally efficent than an LSTM):
+
+Details:
 - **GRU** -- 2-layer, hidden size 64, dropout 0.3
 - **Input** -- `(batch, 250 timesteps, 16 channels)`
 - **Output** -- single logit --> binary prediction
 - **Loss** -- `BCEWithLogitsLoss` with `pos_weight` to handle class imbalance (positive: 2208, negative: 3690)
 - **Optimiser** -- Adam (lr=1e-3) with `ReduceLROnPlateau` scheduler
 - **Split** -- 70% train / 15% val / 15% test
+
+Results:
+| Metric | Score |
+|---|---|
+| Test Accuracy | 89.3% |
+| Positive F1 | 0.86 |
+| Negative F1 | 0.91 |
+| Macro F1 | 0.89 |
 
 ![](README_IMGS/training_curves.png)
 *Model perfromance over time*
