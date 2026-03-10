@@ -92,6 +92,10 @@ Details:
 - **Split** -- 70% train / 15% val / 15% test
 
 Results:
+<table>
+<tr>
+<td>
+
 | Metric | Score |
 |---|---|
 | Test Accuracy | 89.3% |
@@ -99,9 +103,15 @@ Results:
 | Negative F1 | 0.91 |
 | Macro F1 | 0.89 |
 
-![](README_IMGS/training_curves.png)
-*Model perfromance over time*
-|------|
+</td>
+<td>
+
+![training curves](README_IMGS/training_curves.png)
+*Model performance over time*
+
+</td>
+</tr>
+</table>
 
 Library Requirements:
 ```
