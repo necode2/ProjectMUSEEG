@@ -10,7 +10,7 @@ This is the backend server that:
    - Runs it through the GRU to get a mood prediction
    - Returns the mood as a probability (0.0 to 1.0)
 
-To Run you must make sure terminal is in ProjectA directory and run:
+To Run, make sure terminal is in ProjectA directory and run:
     /opt/anaconda3/bin/uvicorn server:app --reload --port 8000
 
 This will start the FastAPI server on http://localhost:8000. 
@@ -22,11 +22,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import torch
 import numpy as np
-from GRU_v1 import EEG_GRU  # import your existing class
+from GRU_v1 import EEG_GRU  # import existing class
 from brainflow.board_shim import BoardShim, BrainFlowInputParams, BoardIds
 import mne
 import joblib
-scaler = joblib.load("/Users/noorelbanna/Desktop/ProjectMUSEEG/ProjectA/eeg_scaler.pkl") # Load the same scaler you used during training
 import uuid
 from pydantic import BaseModel
 from site_SQL import init_db, get_user, save_user, save_mood_reading, save_feedback, get_mood_history
@@ -34,14 +33,27 @@ from dotenv import load_dotenv
 from site_SQL import init_db, get_user, save_user, save_mood_reading, save_feedback, get_mood_history, update_consent
 import os
 
-# loading in Soptify Credentials from .env file (make sure to create this file with your own credentials!)
-load_dotenv("/Users/noorelbanna/Desktop/ProjectMUSEEG/ProjectA/spotify.env")  # Load Spotify API keys from .env file
-SPOTIFY_CLIENT_ID     = os.getenv("SPOTIFY_CLIENT_ID")
-SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
+# check to see if paths exist
+if not os.path.exists("best_gru.pt"):
+    print("ERROR: best_gru.pt not found.")
+    print("Download from: https://huggingface.co/ruuune/BaseMUSEEG/tree/main")
+    sys.exit(1)
+
+if not os.path.exists("eeg_scaler.pkl"):
+    print("ERROR: eeg_scaler.pkl not found.")
+    print("Download from: https://huggingface.co/ruuune/BaseMUSEEG/tree/main")
+    sys.exit(1)
+
+scaler = joblib.load("/Users/noorelbanna/Desktop/ProjectMUSEEG/ProjectA/eeg_scaler.pkl") # Load the same scaler used during training
+
+# Load trained model once at startup
+model = EEG_GRU(input_size=16, hidden_size=64, num_layers=2, dropout=0.3)
+model.load_state_dict(torch.load("/Users/noorelbanna/Desktop/ProjectMUSEEG/Experiment/StimuliSet/epochs/best_gru.pt", weights_only=True))
+model.eval()
 
 init_db()  # make sure database and tables exist before we start handling requests
 app = FastAPI()
-# This lets your HTML file talk to Python (browser security thing)
+# This lets HTML file talk to Python (browser security thing)
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 active_sessions = {} # session_id --> "board": serial poart, "id": random uuid for session
@@ -124,12 +136,6 @@ def connect(request: ConnectRequest):
         "user_id":      user_id,
         "is_real_eeg": is_real_eeg
         }
-
-
-# Load your trained model once at startup
-model = EEG_GRU(input_size=16, hidden_size=64, num_layers=2, dropout=0.3)
-model.load_state_dict(torch.load("/Users/noorelbanna/Desktop/ProjectMUSEEG/Experiment/StimuliSet/epochs/best_gru.pt", weights_only=True))
-model.eval()
 
 
 def preprocess_raw_eeg(raw_array):
