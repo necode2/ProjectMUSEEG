@@ -1,0 +1,236 @@
+<!-- 
+ HOW TO RUN (make sure it is AFTER server.py is running):
+ Make sure terminal is in ProjectA Directory and run:
+ python -m http.server 3000 
+
+This will serve the files in this directory at http://localhost:3000
+Go to: http://localhost:3000/site_beta.html to see the page
+
+
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>MUSEEG</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="site_beta.css">
+</head>
+<body>
+
+<!-- Setup screen where user enters API keys and preferences -->
+
+  <div id="setup-screen">
+    
+    <div class="setup-background">
+      <img class="circle-1" src="site_components/setupScreen.png"/>
+    </div>
+
+    <h1>MUSEEG
+      <div class="header">
+        <div class="settings">
+          <button>
+            <img src="site_components/settings.svg"/>
+          </button>
+        </div>
+
+        <div class="info">
+          <button>
+            <img src="site_components/info.svg"/>
+          </button>
+        </div>
+      </div>
+    </h1>
+    
+
+    <h2>Enter API Keys</h2>
+
+    <div class="input-group">
+      <label>Nickname</label>
+      <input id="nickname" type="text" placeholder="Enter your nickname"/>
+    </div>
+
+    <div class="input-group">
+      <label>Serial Port</label>
+      <input id="serial-port" type="password" placeholder="eg. COM, /dev/ttyUSB0, etc."/>
+    </div>
+    
+    <div class="input-group">
+      <label>YouTube</label>
+      <input id="yt-key" type="password" placeholder="AIza..."/>
+    </div>
+  
+    <div class="input-group">
+      <label>Anthropic</label>
+      <input id="claude-key" type="password" placeholder="sk-ant-..."/>
+    </div>
+
+    <br>
+
+    <div class="input-table">
+      <label id="pick">Pick Genre(s):</label>
+      <div id="genre-grid"></div>
+    </div>
+    <br>
+    <div class="input-table">
+      <label id="pick">Pick Target Mood:</label>
+      <div id="mood-grid"></div>
+    </div>
+
+    <button id="start-session" onclick="startSession()">Start Listening &rarr;</button>
+  </div>
+
+
+<!-- CONSENT BANNER -->
+<div id="consent-banner" style="display:none;">
+    <div id="consent-box">
+        <h1>Before you begin</h2>
+        <p>
+            We'd like to store your EEG mood readings and music 
+            feedback (liked/disliked tracks) to improve our model 
+            and personalize your experience. This data is collected and stored securely. It will 
+            only be used for research purposes and will be 
+            anonymized before any publication or sharing.
+        </p><br>
+        <p>
+            If you decline, the app works normally but mood history 
+            and personalized recommendations won't be available.
+        </p><br>
+        <p><small>You can change this at any time in Settings.</small></p>
+        
+        <div class="consent-buttons">
+            <button id="yes" onclick="handleConsent(true)">Yes, I'm in</button>
+            <button id="no" onclick="handleConsent(false)">No thanks, continue without saving</button>
+        </div>
+    </div>
+</div>
+
+  <!-- WELCOME BACK SCREEN — shown briefly for returning users -->
+<div id="welcome-screen" style="display:none;">
+    <h1>MUSEEG
+      <div class="header">
+        <div class="settings">
+          <button>
+            <img src="site_components/settings.svg"/>
+          </button>
+        </div>
+
+        <div class="info">
+          <button>
+            <img src="site_components/info.svg"/>
+          </button>
+        </div>
+      </div>
+    </h1>
+    
+    <div class="welcome-background">
+      <img class="circle-1" src="site_components/welcomeBackScreen.png"/>
+      <img class="graph-background" src="site_components/frame.png"/>
+    </div>
+    <h2>Welcome back, <span id="welcome-nickname"></span>!</h2>
+    <p id="welcome-stats"></p>
+    
+    <canvas id="history-chart"></canvas>
+    
+    <br>
+    <button id="continue-button" onclick="continueToPlayer()">Next &rarr;</button>
+</div>
+
+<!-- USER SCREEN — shows the player, track info, EEG values, and insights from Claude
+TODO: change youtube div to only be audio, 
+TODO: add a sensory visualizer for the beats
+TODO: add early stopping if mood continues to decline, and a "panic button" to reset to a known good track 
+TODO: add mood insights from claude, and a queue of upcoming tracks -->
+
+  <div id="player-screen" style="display:none;">
+
+    <!-- shown when no real EEG device detected -->
+    <div id="eeg-warning" style="display:none; background:orange; padding:10px;">
+        ⚠️ No EEG device detected — using synthetic data. 
+        Your session data will not be saved.
+    </div>
+
+    <h1>MUSEEG
+      <div class="header">
+        <div class="settings">
+          <button>
+            <img src="site_components/settings.svg"/>
+          </button>
+        </div>
+
+        <div class="info">
+          <button>
+            <img src="site_components/info.svg"/>
+          </button>
+        </div>
+      </div>
+    </h1>
+    <div class="circle-1">
+      <img src="site_components/music_background.png"/>
+    </div>
+    <div class="player-container">
+      <div class="yt-player-sidebar">
+        <!--YouTube video embeds here -->
+        <div id="yt-player-container"></div>
+
+        <!-- Track info -->
+        <p>Now playing: <strong id="track-title">—</strong></p>
+        <p>Channel: <span id="track-channel">—</span></p>
+
+        <!-- Playback controls -->
+        <div class="playback-controls">
+          <button onclick="feedback('like')">
+            <img src="site_components/thumbs-up.svg" style="vertical-align:middle;"/>
+          </button>
+          
+          <button onclick="feedback('dislike')">
+            <img src="site_components/thumbs-down.svg" style="vertical-align:middle;"/>
+          </button>
+          
+          <button onclick="nextTrack()">
+            <img src="site_components/fast-forward.svg" style="vertical-align:middle;"/>
+          </button>
+        </div>
+      </div>
+
+      <div class = "data-insights">
+
+        <!-- EEG readings -->
+        <div class="output-group">
+          <h3>EEG Signals</h3>
+          <p class="eeg">Mood: <span id="mood">—</span></p> <!-- getting probbility from server-->
+        </div>
+        <!-- TO DO
+        <p>Valence:  <span id="val-valence">—</span></p>
+        <p>Arousal:  <span id="val-arousal">—</span></p>
+        <p>Stress:   <span id="val-stress">—</span></p>
+      -->
+
+        <!-- Mood trend over time -->
+        <div class="output-group">
+          <h3>Mood Trend</h3>
+          <p class="mood-trend" id="mood-summary">—</p>
+        </div>
+
+        <!-- Claude's recommendation insight -->
+        <div class="output-group">
+          <h3>Notes</h3>
+          <p class="insight" id="insight-text">Waiting for data...</p>
+        </div>
+
+      <!-- Upcoming queue -->
+        <div class="output-group">
+          <h3>Up Next</h3>
+          <div class="queue" id="queue-list"></div>
+        </div>
+      </div>
+      </div>
+  </div>
+
+
+
+  <!-- JAVASCRIPT -->
+  <script src="site_beta.js"></script>
+</body>
+</html>
