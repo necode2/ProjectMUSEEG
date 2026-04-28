@@ -18,7 +18,6 @@ MUSEEG combines two data streams to adapt music in real time:
 - Python 3.10+ (I'm using version 3.13.5)
 - OpenBCI Cyton+Daisy board (or runs in synthetic mode for demonstration)
 - YouTube Data API key
-- Anthropic API key
 - A modern browser (Chrome recommended)
 
 ---
