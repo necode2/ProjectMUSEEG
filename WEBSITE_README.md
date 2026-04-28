@@ -15,7 +15,7 @@ MUSEEG combines two data streams to adapt music in real time:
 
 ## Requirements
 
-- Python 3.10+
+- Python 3.10+ (I'm using version 3.13.5)
 - OpenBCI Cyton+Daisy board (or runs in synthetic mode for demonstration)
 - YouTube Data API key
 - Anthropic API key
@@ -35,8 +35,18 @@ cd neurotune
 ```bash
 pip install fastapi uvicorn brainflow mne torch numpy joblib python-dotenv pydantic requests
 ```
+**3 — Download Model Files**
 
-**3 — Set up environment variables**
+Download the required model files from Hugging Face 
+and place them in the project root directory:
+
+[Download from Hugging Face](https://huggingface.co/ruuune/BaseMUSEEG/tree/main)
+
+Required files:
+- best_gru.pt
+- eeg_scaler.pkl
+
+**4 — Set up environment variables**
 
 Copy `.env.example` to `.env` and fill in your credentials:
 ```bash
@@ -48,7 +58,7 @@ SPOTIFY_CLIENT_ID=your_spotify_client_id
 SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
 ```
 
-**4 — Get your API keys**
+**5 — Get your API keys**
 
 - YouTube Data API → [Google Cloud Console](https://console.cloud.google.com)
   - Enable YouTube Data API v3
@@ -57,7 +67,7 @@ SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
 - Anthropic API → [Anthropic Console](https://console.anthropic.com)
   - Create an API key (currently functionality with Claude is turned off)
 
-**5 Get your Serial Port**
+**6 Get your Serial Port**
 - Windows → open DeviceManager and look under Ports "(COM&LPT)" 
 - Mac → open terminal and type `ls /dev/tty.*` to get a list of ports in use
 ---
