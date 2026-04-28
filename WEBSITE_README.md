@@ -46,19 +46,9 @@ Required files:
 - best_gru.pt
 - eeg_scaler.pkl
 
-**4 — Set up environment variables**
+you may need to change their file path in `server.py`
 
-Copy `.env.example` to `.env` and fill in your credentials:
-```bash
-cp .env.example .env
-```
-
-```
-SPOTIFY_CLIENT_ID=your_spotify_client_id
-SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
-```
-
-**5 — Get your API keys**
+**4 — Get your API keys**
 
 - YouTube Data API → [Google Cloud Console](https://console.cloud.google.com)
   - Enable YouTube Data API v3
@@ -67,7 +57,7 @@ SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
 - Anthropic API → [Anthropic Console](https://console.anthropic.com)
   - Create an API key (currently functionality with Claude is turned off)
 
-**6 Get your Serial Port**
+**5 Get your Serial Port**
 - Windows → open DeviceManager and look under Ports "(COM&LPT)" 
 - Mac → open terminal and type `ls /dev/tty.*` to get a list of ports in use
 ---
