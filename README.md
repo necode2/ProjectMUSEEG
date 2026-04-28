@@ -1,4 +1,5 @@
-*Note: a locally run version of the project is available for use, please read [WEBSITE_README.md](WEBSITE_README.md) for more details!*
+*UPDATE: a locally run version of the project is available for use, please read [WEBSITE_README.md](WEBSITE_README.md) for more details!*
+|------|
 # ProjectMUSEEG
 ✽ Welcome to Project MUSEEG! (Pronounced Muse-EGG) ✽ </br></br>
 ***Project A*** </br> 
