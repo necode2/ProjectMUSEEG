@@ -117,3 +117,6 @@ MUSEEG collects EEG mood readings and music feedback only with your explicit con
 ## Research Notes
 
 This project is under active development. Current model outputs a binary positive/negative mood classification. Planned extensions include multi-dimensional EEU output (valence, arousal, stress) and audio feature correlation analysis via Spotify and Web Audio API.
+
+---
+## Site Walkthrough
